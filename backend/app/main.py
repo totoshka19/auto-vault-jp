@@ -1,10 +1,21 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import auth, cars
+from app.scraper.worker import scrape_job, start_scheduler
 
-app = FastAPI(title="AutoVault JP API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_scheduler()
+    await scrape_job()  # первый запуск при старте
+    yield
+
+
+app = FastAPI(title="AutoVault JP API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
