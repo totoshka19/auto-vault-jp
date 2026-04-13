@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -11,7 +12,7 @@ from app.scraper.worker import scrape_job, start_scheduler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     start_scheduler()
-    await scrape_job()  # первый запуск при старте
+    asyncio.create_task(scrape_job())  # первый запуск в фоне, не блокирует старт
     yield
 
 
