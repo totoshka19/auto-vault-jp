@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: autovault-jp-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false        # задаётся вручную в Render dashboard
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        sync: false        # задаётся вручную: https://your-app.vercel.app
