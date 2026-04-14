@@ -43,6 +43,8 @@ BODY_TYPE: dict[str, str] = {
     "クロスカントリー": "SUV",
     "コンパクトカー": "Hatchback",
     "デリバリーバン": "Van",
+    "クロカン・ＳＵＶ": "SUV",
+    "クロカン・SUV": "SUV",
 }
 
 FUEL_TYPE: dict[str, str] = {
@@ -67,6 +69,9 @@ DRIVE_TYPE: dict[str, str] = {
     "前輪駆動(FF)": "Передний",
     "後輪駆動(FR)": "Задний",
     "4輪駆動(4WD)": "Полный",
+    "四輪駆動(4WD)": "Полный",
+    "後輪駆動(MR)": "Среднемоторный",
+    "前輪駆動(MR)": "Среднемоторный",
 }
 
 ACCIDENT_HISTORY: dict[str, bool | None] = {

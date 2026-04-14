@@ -80,6 +80,16 @@ def strip_japanese(text: str) -> str:
     return ' '.join(cleaned.split()).strip()
 
 
+def clean_model(text: str) -> str:
+    """Убирает японские символы и мусорные слеши из названия модели."""
+    stripped = strip_japanese(text)
+    # Разбиваем по слешам, оставляем только содержательные части
+    # (не пустые, не одиночные числа вроде '19' или '2019')
+    parts = re.split(r'\s*/\s*', stripped)
+    meaningful = [p.strip() for p in parts if p.strip() and not re.match(r"^'?\d{2,4}$", p.strip())]
+    return ' '.join(meaningful).strip()
+
+
 # --- Сбор ссылок на детальные страницы ---
 
 async def collect_detail_urls(page: Page, brand_code: str) -> list[str]:
@@ -225,7 +235,7 @@ async def scrape_brand(browser: Browser, brand_code: str) -> list[CarData]:
             if car and car.price:
                 car.brand = BRAND_CODES.get(brand_code, car.brand)
                 if car.model:
-                    car.model = strip_japanese(car.model)[:100] or car.model[:100]
+                    car.model = clean_model(car.model)[:100] or car.model[:100]
                 results.append(car)
             await asyncio.sleep(1.5)
     finally:
