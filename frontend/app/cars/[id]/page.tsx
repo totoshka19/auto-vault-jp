@@ -93,7 +93,6 @@ export default function CarDetailPage() {
           <Grid.Col span={{ base: 12, md: 7 }}>
             {photos.length > 0 ? (
               <Carousel
-                withIndicators
                 emblaOptions={{ loop: true }}
                 height={380}
                 styles={{ indicator: { background: 'var(--mantine-color-blue-6)' } }}
