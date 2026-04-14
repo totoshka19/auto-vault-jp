@@ -73,8 +73,17 @@ async def save_cars(cars) -> int:
                 .on_conflict_do_update(
                     index_elements=["url"],
                     set_={
+                        "brand": car.brand,
+                        "model": car.model,
                         "price": car.price,
                         "mileage": car.mileage,
+                        "transmission": car.transmission,
+                        "body_type": car.body_type,
+                        "engine_volume": car.engine_volume,
+                        "fuel_type": car.fuel_type,
+                        "drive_type": car.drive_type,
+                        "color": car.color,
+                        "has_accidents": car.has_accidents,
                         "photos": car.photos,
                         "updated_at": Car.updated_at,
                     },
