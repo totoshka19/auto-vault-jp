@@ -11,8 +11,8 @@ class Car(Base):
     __tablename__ = "cars"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    brand: Mapped[str | None] = mapped_column(String(100))
-    model: Mapped[str | None] = mapped_column(String(100))
+    brand: Mapped[str | None] = mapped_column(Text)
+    model: Mapped[str | None] = mapped_column(Text)
     year: Mapped[int | None] = mapped_column(Integer)
     mileage: Mapped[int | None] = mapped_column(Integer)
     price: Mapped[int | None] = mapped_column(Integer)

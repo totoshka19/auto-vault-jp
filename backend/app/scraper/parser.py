@@ -137,10 +137,10 @@ async def parse_detail_page(page: Page, url: str) -> CarData | None:
         text = h1.get_text(separator=" ", strip=True)
         parts = text.split()
         if len(parts) >= 2:
-            car.brand = parts[0]
-            car.model = " ".join(parts[1:])
+            car.brand = parts[0][:100]
+            car.model = " ".join(parts[1:])[:100]
         else:
-            car.model = text
+            car.model = text[:100]
 
     # Характеристики из таблиц th/td
     for th in soup.find_all("th"):
