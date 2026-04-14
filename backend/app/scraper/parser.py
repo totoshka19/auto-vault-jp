@@ -69,9 +69,27 @@ def parse_year(value: str) -> int | None:
 
 
 def parse_engine_volume(value: str) -> str | None:
-    """'2800cc' → '2800cc', '2.8L' → '2.8L'"""
+    """'660cc' → '0.66 л', '2000cc' → '2.0 л', '2.8L' → '2.8 л'"""
     value = value.strip()
-    return value if value and value != "－" else None
+    if not value or value == "－":
+        return None
+    # Уже в литрах: '2.8L'
+    m = re.match(r'^(\d+\.?\d*)[Ll]$', value)
+    if m:
+        liters = float(m.group(1))
+        s = f"{liters:.2f}".rstrip('0')
+        if s.endswith('.'): s += '0'
+        return f"{s} л"
+    # В кубиках: '660cc', '2000cc'
+    m = re.match(r'^(\d+)[Cc]{2}$', value)
+    if m:
+        liters = int(m.group(1)) / 1000
+        if liters == int(liters):
+            return f"{int(liters)}.0 л"
+        s = f"{liters:.2f}".rstrip('0')
+        if s.endswith('.'): s += '0'
+        return f"{s} л"
+    return value
 
 
 def strip_japanese(text: str) -> str:
