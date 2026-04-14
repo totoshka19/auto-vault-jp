@@ -13,6 +13,7 @@ from app.scraper.translations import (
     DRIVE_TYPE,
     FIELD_MAP,
     FUEL_TYPE,
+    translate_color,
     translate_transmission,
 )
 
@@ -175,7 +176,7 @@ async def parse_detail_page(page: Page, url: str) -> CarData | None:
         elif field_name == "drive_type":
             car.drive_type = DRIVE_TYPE.get(value, value)
         elif field_name == "color":
-            car.color = value if value != "－" else None
+            car.color = translate_color(value)
         elif field_name == "has_accidents":
             car.has_accidents = ACCIDENT_HISTORY.get(value)
 
