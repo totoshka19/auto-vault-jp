@@ -13,7 +13,7 @@ from app.scraper.translations import (
     DRIVE_TYPE,
     FIELD_MAP,
     FUEL_TYPE,
-    TRANSMISSION,
+    translate_transmission,
 )
 
 logger = logging.getLogger(__name__)
@@ -165,7 +165,7 @@ async def parse_detail_page(page: Page, url: str) -> CarData | None:
         elif field_name == "price":
             car.price = parse_man_yen(value)
         elif field_name == "transmission":
-            car.transmission = TRANSMISSION.get(value, value)
+            car.transmission = translate_transmission(value)
         elif field_name == "body_type":
             car.body_type = BODY_TYPE.get(value, value)
         elif field_name == "engine_volume":

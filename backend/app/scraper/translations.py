@@ -14,6 +14,21 @@ TRANSMISSION: dict[str, str] = {
     "デュアルクラッチAT": "Робот",
 }
 
+
+def translate_transmission(value: str) -> str:
+    """Переводит любое обозначение трансмиссии по паттернам."""
+    exact = TRANSMISSION.get(value)
+    if exact:
+        return exact
+    # Паттерн-матчинг для составных значений (フロアMTモード付7AT и т.п.)
+    if "CVT" in value:
+        return "Вариатор"
+    if value.endswith("MT"):  # フロア5MT, フロア6MT, インパネ6MT
+        return "Механика"
+    if "AT" in value:         # フロアMTモード付7AT, インパネ5AT, その他AT, …
+        return "Автомат"
+    return value
+
 BODY_TYPE: dict[str, str] = {
     "セダン": "Sedan",
     "SUV": "SUV",
