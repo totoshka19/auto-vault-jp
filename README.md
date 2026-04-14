@@ -6,7 +6,7 @@
 
 - **Приложение**: https://frontend-gold-five-63.vercel.app
 - **GitHub**: https://github.com/totoshka19/auto-vault-jp
-- **Backend API**: https://auto-vault-jp.onrender.com
+- **Swagger UI**: https://auto-vault-jp.onrender.com/docs
 
 ## Вход
 
@@ -17,14 +17,14 @@
 ## Стек
 
 **Frontend**
-- Next.js 15 (App Router, TypeScript)
-- Mantine UI v7 (компоненты, карусель)
+- Next.js 16 (App Router, TypeScript)
+- Mantine UI v9 (компоненты, карусель)
 - TanStack Query v5 (кеш запросов)
 - Zustand (хранение JWT-токена)
 - Axios (HTTP-клиент)
 
 **Backend**
-- FastAPI + Python 3.11
+- FastAPI + Python 3.10
 - SQLAlchemy (async) + PostgreSQL (Neon)
 - Alembic (миграции)
 - Playwright (парсер CarSensor.net)
