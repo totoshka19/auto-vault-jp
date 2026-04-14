@@ -6,9 +6,7 @@ import type { Car } from '@/lib/types';
 import { yenToRub, formatRub } from '@/lib/currency';
 
 function formatMileage(km: number) {
-  return km >= 10000
-    ? `${(km / 10000).toFixed(1)}万km`
-    : `${km.toLocaleString('ru-RU')} км`;
+  return `${km.toLocaleString('ru-RU')} км`;
 }
 
 export default function CarCard({ car }: { car: Car }) {
