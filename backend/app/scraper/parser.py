@@ -80,6 +80,18 @@ def strip_japanese(text: str) -> str:
     return ' '.join(cleaned.split()).strip()
 
 
+_JP_PAT = re.compile(r'[\u3000-\u9FFF\uFF00-\uFFEF（）「」【】・]+')
+
+
+def translate_dict(d: dict, value: str) -> str | None:
+    """Переводит по словарю; если не найдено — убирает японские символы."""
+    if value in d:
+        return d[value]
+    cleaned = _JP_PAT.sub(' ', value).strip()
+    cleaned = ' '.join(cleaned.split())
+    return cleaned if cleaned else None
+
+
 def clean_model(text: str) -> str:
     """Убирает японские символы и мусорные слеши из названия модели."""
     stripped = strip_japanese(text)
@@ -178,13 +190,13 @@ async def parse_detail_page(page: Page, url: str) -> CarData | None:
         elif field_name == "transmission":
             car.transmission = translate_transmission(value)
         elif field_name == "body_type":
-            car.body_type = BODY_TYPE.get(value, value)
+            car.body_type = translate_dict(BODY_TYPE, value)
         elif field_name == "engine_volume":
             car.engine_volume = parse_engine_volume(value)
         elif field_name == "fuel_type":
-            car.fuel_type = FUEL_TYPE.get(value, value)
+            car.fuel_type = translate_dict(FUEL_TYPE, value)
         elif field_name == "drive_type":
-            car.drive_type = DRIVE_TYPE.get(value, value)
+            car.drive_type = translate_dict(DRIVE_TYPE, value)
         elif field_name == "color":
             car.color = translate_color(value)
         elif field_name == "has_accidents":
