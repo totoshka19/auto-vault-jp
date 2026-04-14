@@ -85,10 +85,6 @@ export default function CatalogPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  useEffect(() => {
-    if (mounted && !token) router.push('/login');
-  }, [mounted, token, router]);
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ['cars', appliedFilters, sort, order, page],
     queryFn: () => fetchCars(appliedFilters, sort, order, page),
@@ -116,6 +112,7 @@ export default function CatalogPage() {
   const handleLogout = () => {
     logout();
     localStorage.removeItem('token');
+    document.cookie = 'token=; path=/; max-age=0';
     router.push('/login');
   };
 

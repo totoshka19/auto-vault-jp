@@ -38,6 +38,7 @@ export default function LoginPage() {
       const { data } = await api.post<{ access_token: string }>('/auth/login', values);
       setToken(data.access_token);
       localStorage.setItem('token', data.access_token);
+      document.cookie = `token=${data.access_token}; path=/; max-age=604800; SameSite=Strict`;
       router.push('/');
     } catch {
       setError('Неверный логин или пароль');

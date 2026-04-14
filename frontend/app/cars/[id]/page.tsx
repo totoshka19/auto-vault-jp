@@ -52,14 +52,10 @@ function formatValue(key: keyof Car, value: unknown): string {
 export default function CarDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { token } = useAuthStore();
+  const token = useAuthStore((s) => s.token);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
-
-  useEffect(() => {
-    if (mounted && !token) router.push('/login');
-  }, [mounted, token, router]);
 
   const { data: car, isLoading, isError } = useQuery<Car>({
     queryKey: ['car', id],
