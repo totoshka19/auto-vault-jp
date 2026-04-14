@@ -9,6 +9,7 @@ from playwright.async_api import Browser, Page
 from app.scraper.translations import (
     ACCIDENT_HISTORY,
     BODY_TYPE,
+    BRAND_CODES,
     DRIVE_TYPE,
     FIELD_MAP,
     FUEL_TYPE,
@@ -70,6 +71,12 @@ def parse_engine_volume(value: str) -> str | None:
     """'2800cc' → '2800cc', '2.8L' → '2.8L'"""
     value = value.strip()
     return value if value and value != "－" else None
+
+
+def strip_japanese(text: str) -> str:
+    """Удаляет японские/CJK символы, оставляет ASCII и цифры."""
+    cleaned = re.sub(r'[\u3000-\u9FFF\uFF00-\uFFEF（）「」【】・]+', ' ', text)
+    return ' '.join(cleaned.split()).strip()
 
 
 # --- Сбор ссылок на детальные страницы ---
@@ -206,6 +213,9 @@ async def scrape_brand(browser: Browser, brand_code: str) -> list[CarData]:
         for url in detail_urls:
             car = await parse_detail_page(page, url)
             if car and car.price:
+                car.brand = BRAND_CODES.get(brand_code, car.brand)
+                if car.model:
+                    car.model = strip_japanese(car.model)[:100] or car.model[:100]
                 results.append(car)
             await asyncio.sleep(1.5)
     finally:
