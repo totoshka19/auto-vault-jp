@@ -42,9 +42,13 @@ const SPEC_LABELS: Partial<Record<keyof Car, string>> = {
 };
 
 function formatValue(key: keyof Car, value: unknown): string {
+  if (key === 'has_accidents') {
+    if (value === true) return 'Есть';
+    if (value === false) return 'Нет';
+    return 'Нет данных';
+  }
   if (value == null) return '—';
   if (key === 'mileage') return formatMileage(value as number);
-  if (key === 'has_accidents') return (value as boolean) ? 'Есть' : 'Нет';
   if (key === 'year') return `${value} г.`;
   return String(value);
 }
