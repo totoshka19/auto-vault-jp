@@ -85,8 +85,7 @@ async def collect_detail_urls(page: Page, brand_code: str) -> list[str]:
         logger.info("Собираю ссылки: %s", url)
 
         try:
-            await page.goto(url, timeout=30000)
-            await page.wait_for_load_state("networkidle", timeout=15000)
+            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
         except Exception as e:
             logger.warning("Не удалось загрузить страницу %s: %s", url, e)
             break
@@ -122,8 +121,7 @@ async def collect_detail_urls(page: Page, brand_code: str) -> list[str]:
 async def parse_detail_page(page: Page, url: str) -> CarData | None:
     """Парсит детальную страницу автомобиля."""
     try:
-        await page.goto(url, timeout=30000)
-        await page.wait_for_load_state("networkidle", timeout=15000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=60000)
     except Exception as e:
         logger.warning("Не удалось загрузить %s: %s", url, e)
         return None
@@ -192,7 +190,11 @@ async def scrape_brand(browser: Browser, brand_code: str) -> list[CarData]:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/124.0.0.0 Safari/537.36"
-        )
+        ),
+        locale="ja-JP",
+        extra_http_headers={
+            "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
     )
     page = await context.new_page()
     results: list[CarData] = []

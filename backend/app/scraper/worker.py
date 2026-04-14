@@ -21,7 +21,14 @@ async def scrape_job() -> None:
     total_saved = 0
 
     async with async_playwright() as pw:
-        browser = await pw.chromium.launch(headless=True)
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-blink-features=AutomationControlled",
+            ],
+        )
         try:
             for brand_code in BRAND_CODES:
                 cars = await scrape_brand(browser, brand_code)
