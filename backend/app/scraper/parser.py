@@ -180,11 +180,20 @@ async def parse_detail_page(page: Page, url: str) -> CarData | None:
         elif field_name == "has_accidents":
             car.has_accidents = ACCIDENT_HISTORY.get(value)
 
-    # Фотографии с CDN
-    for img in soup.find_all("img", src=re.compile(r"ccsrpcma\.carsensor\.net/CSphoto")):
-        src = img.get("src", "")
-        if src and src not in car.photos:
+    # Фотографии галереи: <a data-photo="..."> на ccsrpcml CDN
+    ml_cdn = re.compile(r"ccsrpcml\.carsensor\.net/CSphoto")
+    for a in soup.find_all("a", attrs={"data-photo": True}):
+        src = a.get("data-photo", "")
+        if ml_cdn.search(src) and src not in car.photos:
             car.photos.append(src)
+
+    # Fallback: главное фото с ccsrpcma CDN (если галерея не нашлась)
+    if not car.photos:
+        ma_cdn = re.compile(r"ccsrpcma\.carsensor\.net/CSphoto")
+        for img in soup.find_all("img", src=ma_cdn):
+            src = img.get("src", "")
+            if src and src not in car.photos:
+                car.photos.append(src)
 
     return car
 
